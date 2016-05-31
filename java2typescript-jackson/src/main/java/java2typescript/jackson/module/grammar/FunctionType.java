@@ -51,7 +51,9 @@ public class FunctionType extends AbstractType {
 			i++;
 		}
 		writer.write(")" + (lambdaSyntax ? "=> " : ": "));
+		writer.write("Promise<");
 		resultType.write(writer);
+		writer.write(">");
 	}
 
 	public LinkedHashMap<String, AbstractType> getParameters() {
