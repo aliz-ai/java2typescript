@@ -21,7 +21,7 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>java2typescript</groupId>
+				<groupId>doctusoft.java2typescript</groupId>
 				<artifactId>java2typescript-maven-plugin</artifactId>
 				<version>0.3-SNAPSHOT</version>
 				<configuration>

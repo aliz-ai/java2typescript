@@ -90,6 +90,22 @@ public class MainMojo extends AbstractMojo {
 	 */
 	private String jsTemplate;
 
+	/**
+	 * A filename to override the default <moduleName>.d.ts
+	 * @parameter
+	 *    alias="tsOutFolder"
+	 * 		expression="${j2ts.tsOutFileName}"
+	 */
+	private String tsOutFileName;
+
+	/**
+	 * A filename to override the default <moduleName>.js
+	 * @parameter
+	 *    alias="tsOutFolder"
+	 * 		expression="${j2ts.jsOutFileName}"
+	 */
+	private String jsOutFileName;
+
 	@Override
 	public void execute() throws MojoExecutionException {
 
@@ -100,9 +116,19 @@ public class MainMojo extends AbstractMojo {
 			ServiceDescriptorGenerator descGen = new ServiceDescriptorGenerator(Lists.newArrayList(serviceClass));
 			descGen.setAlternateJsTemplate(jsTemplate);
 
+			String typeDefinitionFileName = moduleName + ".d.ts";
+			if (tsOutFileName != null) {
+				typeDefinitionFileName = tsOutFileName;
+			}
+
+			String descriptorFileName = moduleName + ".js";
+			if (jsOutFileName != null) {
+				descriptorFileName = jsOutFileName;
+			}
+
 			// To Typescript
 			{
-				Writer writer = createFileAndGetWriter(tsOutFolder, moduleName + ".d.ts");
+				Writer writer = createFileAndGetWriter(tsOutFolder, typeDefinitionFileName);
 				Module tsModule = descGen.generateTypeScript(moduleName);
 				tsModule.write(writer);
 				writer.close();
@@ -110,7 +136,7 @@ public class MainMojo extends AbstractMojo {
 
 			// To JS
 			{
-				Writer outFileWriter = createFileAndGetWriter(jsOutFolder, moduleName + ".js");
+				Writer outFileWriter = createFileAndGetWriter(jsOutFolder, descriptorFileName);
 				descGen.generateJavascript(moduleName, outFileWriter);
 				outFileWriter.close();
 			}
